@@ -1,0 +1,25 @@
+{
+  "name": "parking-system-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "REST API for the parking management system",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:migrate": "node src/database/run-migrations.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  },
+  "license": "MIT"
+}
