@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!--
+      This document deliberately contains no Spanish text. Every visible string is named by a
+      data-label attribute and written from src/constants/labels.js when the page boots, so
+      the rule that all interface text lives in one file is verifiable rather than promised.
+      The title below is the product name and is replaced with the Spanish one on boot.
+    -->
+    <title>Parking System</title>
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563eb'/><text x='16' y='23' font-family='system-ui,sans-serif' font-size='20' font-weight='700' fill='white' text-anchor='middle'>P</text></svg>"
+    />
+    <link rel="stylesheet" href="./src/styles/main.css" />
+  </head>
+
+  <body>
+    <header class="app-header">
+      <div class="app-header__content">
+        <h1 class="app-header__title" data-label="APP_TITLE"></h1>
+        <p class="app-header__subtitle" data-label="APP_SUBTITLE"></p>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!--
+        aria-live tells a screen reader to announce whatever appears here without moving the
+        focus, which is what a success or error notice needs.
+      -->
+      <div id="alert-region" class="alert-region" role="status" aria-live="polite"></div>
+
+      <section class="panel" aria-labelledby="availability-title">
+        <div class="panel__header">
+          <h2 class="panel__title" id="availability-title" data-label="AVAILABILITY.TITLE"></h2>
+          <span
+            class="badge badge--danger"
+            id="availability-full-badge"
+            data-label="AVAILABILITY.FULL_BADGE"
+            hidden
+          ></span>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat__label" data-label="AVAILABILITY.CAPACITY"></span>
+            <span class="stat__value" id="availability-capacity">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label" data-label="AVAILABILITY.OCCUPIED"></span>
+            <span class="stat__value stat__value--warning" id="availability-occupied">—</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label" data-label="AVAILABILITY.AVAILABLE"></span>
+            <span class="stat__value stat__value--success" id="availability-available">—</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="forms-grid">
+        <section class="panel" aria-labelledby="entry-form-title">
+          <div class="panel__header">
+            <h2 class="panel__title" id="entry-form-title" data-label="ENTRY_FORM.TITLE"></h2>
+          </div>
+
+          <form class="form" id="entry-form" novalidate>
+            <div class="field">
+              <label class="field__label" for="entry-plate" data-label="ENTRY_FORM.PLATE_LABEL"></label>
+              <input
+                class="field__input"
+                id="entry-plate"
+                name="plate"
+                type="text"
+                maxlength="6"
+                autocomplete="off"
+                spellcheck="false"
+                data-label-placeholder="ENTRY_FORM.PLATE_PLACEHOLDER"
+              />
+              <p class="field__hint" data-label="ENTRY_FORM.PLATE_HINT"></p>
+              <p class="field__error" id="entry-plate-error" hidden></p>
+            </div>
+
+            <div class="field">
+              <label
+                class="field__label"
+                for="entry-vehicle-type"
+                data-label="ENTRY_FORM.VEHICLE_TYPE_LABEL"
+              ></label>
+              <select class="field__input" id="entry-vehicle-type" name="vehicleType">
+                <option value="" data-label="ENTRY_FORM.VEHICLE_TYPE_PLACEHOLDER"></option>
+              </select>
+              <p class="field__error" id="entry-vehicle-type-error" hidden></p>
+            </div>
+
+            <button
+              class="button button--primary"
+              id="entry-submit"
+              type="submit"
+              data-label="ENTRY_FORM.SUBMIT"
+            ></button>
+
+            <p
+              class="field__error"
+              id="entry-blocked-notice"
+              data-label="ENTRY_FORM.BLOCKED_WHEN_FULL"
+              hidden
+            ></p>
+          </form>
+        </section>
+
+        <section class="panel" aria-labelledby="exit-form-title">
+          <div class="panel__header">
+            <h2 class="panel__title" id="exit-form-title" data-label="EXIT_FORM.TITLE"></h2>
+          </div>
+
+          <form class="form" id="exit-form" novalidate>
+            <div class="field">
+              <label class="field__label" for="exit-plate" data-label="EXIT_FORM.PLATE_LABEL"></label>
+              <input
+                class="field__input"
+                id="exit-plate"
+                name="plate"
+                type="text"
+                maxlength="6"
+                autocomplete="off"
+                spellcheck="false"
+                data-label-placeholder="EXIT_FORM.PLATE_PLACEHOLDER"
+              />
+              <p class="field__error" id="exit-plate-error" hidden></p>
+            </div>
+
+            <button
+              class="button button--secondary"
+              id="exit-submit"
+              type="submit"
+              data-label="EXIT_FORM.SUBMIT"
+            ></button>
+          </form>
+        </section>
+      </div>
+
+      <section class="panel panel--receipt" id="receipt-panel" aria-labelledby="receipt-title" hidden>
+        <div class="panel__header">
+          <h2 class="panel__title" id="receipt-title" data-label="RECEIPT.TITLE"></h2>
+          <button
+            class="button button--ghost"
+            id="receipt-close"
+            type="button"
+            data-label="RECEIPT.CLOSE"
+          ></button>
+        </div>
+
+        <dl class="receipt">
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.PLATE"></dt>
+            <dd id="receipt-plate">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.VEHICLE_TYPE"></dt>
+            <dd id="receipt-vehicle-type">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.ENTRY_TIME"></dt>
+            <dd id="receipt-entry-time">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.EXIT_TIME"></dt>
+            <dd id="receipt-exit-time">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.STAY"></dt>
+            <dd id="receipt-stay">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.BILLABLE_HOURS"></dt>
+            <dd id="receipt-billable-hours">—</dd>
+          </div>
+          <div class="receipt__row">
+            <dt data-label="RECEIPT.HOURLY_RATE"></dt>
+            <dd id="receipt-hourly-rate">—</dd>
+          </div>
+          <div class="receipt__row receipt__row--total">
+            <dt data-label="RECEIPT.TOTAL"></dt>
+            <dd id="receipt-total">—</dd>
+          </div>
+        </dl>
+
+        <p class="receipt__notice" id="receipt-grace-notice" data-label="RECEIPT.GRACE_NOTICE" hidden></p>
+      </section>
+
+      <section class="panel" aria-labelledby="parked-table-title">
+        <div class="panel__header">
+          <h2 class="panel__title" id="parked-table-title" data-label="PARKED_TABLE.TITLE"></h2>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="table" id="parked-table">
+            <thead>
+              <tr>
+                <th scope="col" data-label="PARKED_TABLE.PLATE"></th>
+                <th scope="col" data-label="PARKED_TABLE.VEHICLE_TYPE"></th>
+                <th scope="col" data-label="PARKED_TABLE.ENTRY_TIME"></th>
+                <th scope="col" data-label="PARKED_TABLE.ELAPSED"></th>
+              </tr>
+            </thead>
+            <tbody id="parked-table-body"></tbody>
+          </table>
+        </div>
+
+        <p class="empty-state" id="parked-table-empty" data-label="PARKED_TABLE.EMPTY" hidden></p>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
