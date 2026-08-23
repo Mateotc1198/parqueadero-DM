@@ -13,3 +13,10 @@ export const API_BASE_URL = "/api/v1";
 
 /** A request that has not answered by then is treated as a failure instead of hanging. */
 export const REQUEST_TIMEOUT_MS = 10_000;
+
+/**
+ * The screen also refreshes after every operation. This interval exists so the elapsed time
+ * column and the occupancy stay honest on a screen nobody is touching, for instance one
+ * mounted at the booth.
+ */
+export const REFRESH_INTERVAL_MS = 30_000;
