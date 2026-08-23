@@ -1,0 +1,18 @@
+{
+  "name": "parking-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parking management system: REST API and web client",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "setup": "npm --prefix server install && docker compose up -d --wait && npm --prefix server run db:migrate",
+    "dev": "npm --prefix server run dev",
+    "start": "npm --prefix server start",
+    "test": "npm --prefix server test",
+    "test:coverage": "npm --prefix server run test:coverage",
+    "db:migrate": "npm --prefix server run db:migrate"
+  },
+  "license": "MIT"
+}
