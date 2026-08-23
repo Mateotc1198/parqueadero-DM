@@ -34,6 +34,7 @@ export const ERROR_MESSAGES = Object.freeze({
   // Required fields
   BODY_REQUIRED: "El cuerpo de la petición no puede estar vacío",
   MALFORMED_JSON: "El cuerpo de la petición no es un JSON válido",
+  PAYLOAD_TOO_LARGE: "El cuerpo de la petición es demasiado grande",
   PLATE_REQUIRED: "La placa es obligatoria",
   VEHICLE_TYPE_REQUIRED: "El tipo de vehículo es obligatorio",
 
