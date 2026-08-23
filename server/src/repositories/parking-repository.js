@@ -200,6 +200,19 @@ const createParkingRepository = (client) => {
     },
 
     /**
+     * Recognizes the duplicate active plate collision raised by the idx_active_plate
+     * partial unique index.
+     *
+     * It is part of the repository contract rather than a standalone export so the service
+     * can ask "was this a duplicate plate?" without importing the persistence module, which
+     * would drag the connection pool into a layer that must stay free of infrastructure.
+     * Detection belongs here because the driver error code is a persistence detail;
+     * deciding that it means HTTP 409 belongs to the service.
+     */
+    isUniqueActivePlateViolation: (error) =>
+      error?.code === POSTGRES_UNIQUE_VIOLATION && error?.constraint === ACTIVE_PLATE_INDEX_NAME,
+
+    /**
      * Runs the callback inside a transaction and hands it a repository bound to it,
      * so callers never touch a pg client. Nesting reuses the current transaction
      * instead of taking a second connection, which would deadlock on its own lock.
@@ -214,13 +227,5 @@ const createParkingRepository = (client) => {
 
   return repository;
 };
-
-/**
- * Recognizes the duplicate active plate collision raised by the idx_active_plate partial
- * unique index. Detection belongs here because the driver error code is a persistence
- * detail; deciding that it means HTTP 409 belongs to the service.
- */
-export const isUniqueActivePlateViolation = (error) =>
-  error?.code === POSTGRES_UNIQUE_VIOLATION && error?.constraint === ACTIVE_PLATE_INDEX_NAME;
 
 export const parkingRepository = createParkingRepository();
