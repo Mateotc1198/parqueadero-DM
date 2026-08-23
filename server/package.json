@@ -13,6 +13,7 @@
     "dev": "node --watch src/server.js",
     "db:migrate": "node src/database/run-migrations.js",
     "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
     "test:watch": "node --test --watch"
   },
   "dependencies": {
