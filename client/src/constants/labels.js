@@ -79,9 +79,4 @@ export const LABELS = Object.freeze({
     PLATE_INVALID_FORMAT: "La placa no tiene un formato válido",
     VEHICLE_TYPE_REQUIRED: "Debe seleccionar un tipo de vehículo",
   }),
-
-  COMMON: Object.freeze({
-    LOADING: "Cargando...",
-    CONNECTION_VERIFIED: "Conexión con la API verificada correctamente",
-  }),
 });
