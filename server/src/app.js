@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import cors from "cors";
 import express from "express";
 
@@ -16,6 +18,13 @@ import { createParkingService } from "./services/parking-service.js";
  * Capping it stops an oversized request from consuming memory before validation runs.
  */
 const JSON_BODY_LIMIT = "10kb";
+
+/**
+ * The web client is plain HTML, CSS and native ES modules, so it needs no build step and
+ * can be served straight from disk. Serving it from the API means both share one origin:
+ * the client calls the relative path /api/v1 and CORS never enters the normal flow.
+ */
+const CLIENT_DIRECTORY = path.resolve(import.meta.dirname, "..", "..", "client");
 
 /**
  * Composition root.
@@ -42,6 +51,11 @@ export const createApp = () => {
   app.use(express.json({ limit: JSON_BODY_LIMIT }));
 
   app.use(createApiRouter({ parkingController }));
+
+  // Static files come after the API on purpose. The other way round, every API request
+  // would first look for a file on disk, and an unknown /api/v1 path would fall through to
+  // the static handler instead of reaching the JSON not found response.
+  app.use(express.static(CLIENT_DIRECTORY));
 
   app.use(notFoundHandler);
   app.use(errorHandler);
